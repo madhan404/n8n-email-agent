@@ -18,12 +18,30 @@ And the best part? Built with **₹0 cost – fully self-hosted & free tools!** 
 ---
 
 ## 💡 Workflow Overview
+
 1. **Telegram Bot** receives user request.
 2. **n8n Docker (Localhost)** processes the workflow.
 3. **MongoDB** stores session, chat ID, and chat memory.
 4. **DeepSeek R1 in LM Studio** generates the AI response.
 5. **Brevo** triggers email delivery.
 6. **HTTP Node** sends confirmation back to the user via Telegram.
+
+---
+
+## 🖼️ Workflow Screenshots
+
+### 📸 Workflow Overview:
+![Workflow Screenshot](./workflow.jpg)
+
+---
+
+### 🤖 LM Studio (DeepSeek R1) Running:
+![LM Studio Screenshot](./lmstudio.png)
+
+---
+
+### ✈️ Telegram Bot Setup:
+![Telegram Bot Screenshot](./telegrambot.jpg)
 
 ---
 
