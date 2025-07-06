@@ -1,0 +1,250 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "databaseName": "n8n"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+      "typeVersion": 1,
+      "position": [
+        -2580,
+        -180
+      ],
+      "id": "7e1083f7-d7aa-4c92-99bf-3f28e16352c4",
+      "name": "MongoDB Chat Memory",
+      "credentials": {
+        "mongoDb": {
+          "id": "XedVvRT94NFFga6k",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "deepseek/deepseek-r1-0528-qwen3-8b",
+          "mode": "list",
+          "cachedResultName": "deepseek/deepseek-r1-0528-qwen3-8b"
+        },
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOpenAi",
+      "typeVersion": 1.2,
+      "position": [
+        -2800,
+        -200
+      ],
+      "id": "82fcf166-ecb1-4e1d-b2a8-5953934efc00",
+      "name": "deepseek maams",
+      "credentials": {
+        "openAiApi": {
+          "id": "qGP6jP4eO8krfEVs",
+          "name": "Deepseek maams"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -3100,
+        -440
+      ],
+      "id": "381efd25-e81c-49f0-a85c-52790e744c42",
+      "name": "Telegram Trigger1",
+      "webhookId": "0321c2eb-6263-4b47-9d1b-061890ed2205",
+      "credentials": {
+        "telegramApi": {
+          "id": "mE8LQLAGb4Ne9QTD",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.telegram.org/bot6373165382:AAHbQ3r7EPiyn2hYYflrcgUkgm9y7A8cOAI/sendMessage",
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "chat_id",
+              "value": "={{ $('Telegram Trigger1').item.json.message.chat.id }}"
+            },
+            {
+              "name": "text",
+              "value": "=\"✅ Your AI reply has been processed!\"     \n\n{{ $('ai').item.json.output}} "
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -2220,
+        -440
+      ],
+      "id": "e05ba737-1d9f-4299-92df-50e7900feeb3",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "554ef32f-2cd5-4392-a366-83bb75f2f378",
+              "name": "sessionId",
+              "value": "={{ $json.message.chat.id }}",
+              "type": "string"
+            },
+            {
+              "id": "6736e34a-e99c-44f4-9d24-0520112c33d4",
+              "name": "chatInput",
+              "value": "={{$json.message.text}}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -2880,
+        -440
+      ],
+      "id": "6dea9011-3e4f-48e0-b200-e8080ed1cf4a",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={\n  \"role\": \"user\",\n  \"content\": \"{{ $('Telegram Trigger1').item.json.message.text }}\"\n}\n",
+        "options": {
+          "systemMessage": "You are MailGenBot, an assistant that generates friendly, natural, and professional email content.\n\nInstructions:\n- Always return the result in pure JSON format like below:\n{\n  \"Subject\": \"string\",\n  \"Text_Content\": \"string\"\n}\n- Make the email sound friendly and human.\n- Use the sender's name “Madhanuuh” in the closing. Never say “The Group”.\n"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 2,
+      "position": [
+        -2620,
+        -440
+      ],
+      "id": "1177562f-9d1e-46ff-ae2b-45f3784a69e1",
+      "name": "ai"
+    },
+    {
+      "parameters": {
+        "subject": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Subject', ``, 'string') }}",
+        "textContent": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Text_Content', ``, 'string') }}",
+        "sender": "madhanrajs047@gmail.com",
+        "receipients": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Receipients', ``, 'string') }}",
+        "additionalFields": {},
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-base.sendInBlueTool",
+      "typeVersion": 1,
+      "position": [
+        -2280,
+        -200
+      ],
+      "id": "a96b9d51-4615-49b4-b966-dbc4a46c0937",
+      "name": "brevo",
+      "credentials": {
+        "sendInBlueApi": {
+          "id": "FNKoIcLvSa1UXkD3",
+          "name": "Brevo account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "MongoDB Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "ai",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "deepseek maams": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "ai",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger1": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "ai",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "ai": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "brevo": {
+      "ai_tool": [
+        [
+          {
+            "node": "ai",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "e9af115f-6435-4bc6-96ba-60080ee4b1f2",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "dacbbe058be8758b0e6158fcee82905127239f6ccd073e367932a5199c498fb4"
+  },
+  "id": "EaSNbFIeXFI2QX8q",
+  "tags": []
+}
