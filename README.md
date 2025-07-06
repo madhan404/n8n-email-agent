@@ -58,7 +58,7 @@ And the best part? Built with **₹0 cost – fully self-hosted & free tools!** 
 ---
 
 ## 🔗 Live Demo Flow
-> 📄 [Check out my LinkedIn post here!](Add-your-LinkedIn-post-link-here)
+> 📄 [Check out my LinkedIn post here!](https://www.linkedin.com/posts/madhanraj-s-35430a284_n8n-aiagent-telegrambot-activity-7347621431439998976-RexX?utm_source=share&utm_medium=member_android&rcm=ACoAAEUZ6XABExiIfOLTQMHhp-UuKPgP3EriViY)
 
 ---
 
